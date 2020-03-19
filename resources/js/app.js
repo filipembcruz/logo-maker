@@ -39,9 +39,10 @@ const vuetify = new Vuetify({
 
 Vue.component('main-menu', require('./components/Menu.vue').default);
 Vue.component('main-card', require('./components/MainCard.vue').default);
-Vue.component('combobox', require('./components/Combobox.vue').default);
 Vue.component('body-card', require('./components/BodyCard.vue').default);
 Vue.component('logo-card', require('./components/LogoCard.vue').default);
+Vue.component('main-form', require('./components/MainForm.vue').default);
+Vue.component('custom-btn', require('./components/CustomBtn.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

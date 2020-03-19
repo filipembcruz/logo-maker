@@ -17,6 +17,8 @@ Route::get('/', function () {
     return view('home');
 })->name('home');
 
-Route::get('/results', function () {
+Route::get('/results/', function () {
     return view('results');
 })->name('results');
+
+Route::get('/generate/{term}/{page}/{limit}', 'GeneratorController@getIcons')->name('generate');
