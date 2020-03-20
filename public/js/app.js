@@ -2002,6 +2002,22 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2021,6 +2037,9 @@ __webpack_require__.r(__webpack_exports__);
     return {
       icons: [],
       overlay: false,
+      currentLogo: "",
+      company: "",
+      dialog: false,
       allTerms: [],
       limit: 6,
       page: 0
@@ -2064,19 +2083,25 @@ __webpack_require__.r(__webpack_exports__);
       self.page--;
       return term;
     },
-    downloadImage: function downloadImage(id) {
-      html2canvas__WEBPACK_IMPORTED_MODULE_1___default()(document.querySelector(id), {
-        width: 2000,
-        height: 2000,
-        useCORS: true
-      }).then(function (canvas) {
-        console.log(canvas);
-        var link = document.createElement("a"); // toDataURL defaults to png, so we need to request a jpeg, then convert for file download.
+    mountImage: function mountImage(url) {
+      this.dialog = true;
+      this.currentLogo = url;
+    },
+    downloadImage: function downloadImage(url) {
+      setTimeout(function () {
+        html2canvas__WEBPACK_IMPORTED_MODULE_1___default()(document.querySelector("#current_logo"), {
+          width: 2000,
+          height: 2000,
+          useCORS: true
+        }).then(function (canvas) {
+          console.log(canvas);
+          var link = document.createElement("a"); // toDataURL defaults to png, so we need to request a jpeg, then convert for file download.
 
-        link.href = canvas.toDataURL("image/png");
-        link.download = "somefilename.png";
-        link.click();
-      });
+          link.href = canvas.toDataURL("image/png");
+          link.download = "somefilename.png";
+          link.click();
+        });
+      }, 1000);
     }
   }
 });
@@ -6845,7 +6870,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.v-card__subtitle.card-logo {\r\n  font-family: \"Quicksand\", sans-serif;\r\n  font-weight: bold;\r\n  font-size: 24px;\r\n  line-height: 30px;\r\n  color: #000000 !important;\n}\r\n", ""]);
+exports.push([module.i, "\n.v-card__subtitle.card-logo,\r\n.card-logo {\r\n  font-family: \"Quicksand\", sans-serif;\r\n  font-weight: bold;\r\n  font-size: 24px;\r\n  line-height: 30px;\r\n  color: #000000 !important;\n}\n.v-dialog.v-dialog--active.v-dialog--fullscreen {\r\n  background: white;\n}\r\n", ""]);
 
 // exports
 
@@ -45582,19 +45607,30 @@ var render = function() {
               "v-card",
               {
                 staticClass: "card-logo pt-8 pb-5",
-                attrs: { id: "logo_" + icon.id, outlined: "" },
+                attrs: { outlined: "" },
                 on: {
                   click: function($event) {
-                    return _vm.downloadImage("#logo_" + icon.id)
+                    return _vm.mountImage(icon.url)
                   }
                 }
               },
               [
-                _c("img", {
-                  staticClass: "mx-auto d-block",
-                  staticStyle: { "max-height": "80px" },
-                  attrs: { src: icon.url }
-                }),
+                _c(
+                  "div",
+                  {
+                    staticStyle: {
+                      width: "50%",
+                      margin: "0 auto",
+                      "max-height": "80px"
+                    }
+                  },
+                  [
+                    _c("img", {
+                      staticClass: "mx-auto d-block",
+                      attrs: { src: icon.url }
+                    })
+                  ]
+                ),
                 _vm._v(" "),
                 _c("v-card-subtitle", {
                   staticClass: "card-logo text-center",
@@ -45603,13 +45639,108 @@ var render = function() {
                 })
               ],
               1
-            ),
-            _vm._v(" "),
-            _c("div", { attrs: { id: "previewImage" } })
+            )
           ],
           1
         )
-      })
+      }),
+      _vm._v(" "),
+      _c(
+        "v-dialog",
+        {
+          attrs: {
+            fullscreen: "",
+            "hide-overlay": "",
+            transition: "dialog-bottom-transition"
+          },
+          model: {
+            value: _vm.dialog,
+            callback: function($$v) {
+              _vm.dialog = $$v
+            },
+            expression: "dialog"
+          }
+        },
+        [
+          _c(
+            "v-toolbar",
+            { attrs: { dark: "", color: "primary" } },
+            [
+              _c(
+                "v-btn",
+                {
+                  attrs: { icon: "", dark: "" },
+                  on: {
+                    click: function($event) {
+                      _vm.dialog = false
+                    }
+                  }
+                },
+                [_c("v-icon", [_vm._v("mdi-close")])],
+                1
+              ),
+              _vm._v(" "),
+              _c("v-toolbar-title", [_vm._v("Settings")]),
+              _vm._v(" "),
+              _c("v-spacer"),
+              _vm._v(" "),
+              _c(
+                "v-toolbar-items",
+                [
+                  _c(
+                    "v-btn",
+                    {
+                      attrs: { dark: "", text: "" },
+                      on: {
+                        click: function($event) {
+                          return _vm.downloadImage()
+                        }
+                      }
+                    },
+                    [_vm._v("Download")]
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _vm.currentLogo
+            ? _c(
+                "div",
+                {
+                  staticStyle: {
+                    "background-color": "#eaeaea",
+                    width: "70%",
+                    margin: "5% auto"
+                  },
+                  attrs: { id: "current_logo" }
+                },
+                [
+                  _c("img", {
+                    staticStyle: {
+                      width: "50%",
+                      display: "block",
+                      margin: "0 auto"
+                    },
+                    attrs: { src: _vm.currentLogo }
+                  }),
+                  _vm._v(" "),
+                  _c("h1", {
+                    staticClass: "card-logo",
+                    staticStyle: {
+                      "font-size": "12rem",
+                      "text-align": "center"
+                    },
+                    domProps: { textContent: _vm._s(_vm.company) }
+                  })
+                ]
+              )
+            : _vm._e()
+        ],
+        1
+      )
     ],
     2
   )

@@ -4,21 +4,37 @@
       <v-progress-circular indeterminate size="150" width="10" color="#3F51B5"></v-progress-circular>
     </v-overlay>
     <v-col cols="12" md="4" sm="6" v-for="icon in icons" :key="icon.id" class="pa-5">
-      <v-card
-        :id="'logo_'+icon.id"
-        class="card-logo pt-8 pb-5"
-        outlined
-        @click="downloadImage('#logo_'+icon.id)"
-      >
-        <img :src="icon.url" style="max-height: 80px;" class="mx-auto d-block" />
+      <v-card class="card-logo pt-8 pb-5" outlined @click="mountImage(icon.url)">
+        <div style="width: 50%;margin: 0 auto;max-height: 80px;">
+          <img :src="icon.url" class="mx-auto d-block" />
+        </div>
         <v-card-subtitle
           class="card-logo text-center"
           v-text="company"
           style="text-transform: capitalize;"
         ></v-card-subtitle>
       </v-card>
-      <div id="previewImage"></div>
     </v-col>
+    <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
+      <v-toolbar dark color="primary">
+        <v-btn icon dark @click="dialog = false">
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
+        <v-toolbar-title>Settings</v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-toolbar-items>
+          <v-btn dark text @click="downloadImage()">Download</v-btn>
+        </v-toolbar-items>
+      </v-toolbar>
+      <div
+        v-if="currentLogo"
+        id="current_logo"
+        style="background-color: #eaeaea; width: 70%; margin: 5% auto;"
+      >
+        <img :src="currentLogo" style="width: 50%; display: block; margin: 0 auto;" />
+        <h1 class="card-logo" v-text="company" style="font-size: 12rem; text-align: center;"></h1>
+      </div>
+    </v-dialog>
   </v-row>
 </template>
 
@@ -41,6 +57,9 @@ export default {
     return {
       icons: [],
       overlay: false,
+      currentLogo: "",
+      company: "",
+      dialog: false,
       allTerms: [],
       limit: 6,
       page: 0
@@ -87,31 +106,41 @@ export default {
       self.page--;
       return term;
     },
-    downloadImage(id) {
-      html2canvas(document.querySelector(id), {
-        width: 2000,
-        height: 2000,
-        useCORS: true,
-      }).then(function(canvas) {
-        console.log(canvas);
-        
-        var link = document.createElement("a");
-        // toDataURL defaults to png, so we need to request a jpeg, then convert for file download.
-        link.href = canvas.toDataURL("image/png");
-        link.download = "somefilename.png";
-        link.click();
-      });
+    mountImage(url) {
+      this.dialog = true;
+      this.currentLogo = url;
+    },
+    downloadImage(url) {
+      setTimeout(() => {
+        html2canvas(document.querySelector("#current_logo"), {
+          width: 2000,
+          height: 2000,
+          useCORS: true
+        }).then(function(canvas) {
+          console.log(canvas);
+
+          var link = document.createElement("a");
+          // toDataURL defaults to png, so we need to request a jpeg, then convert for file download.
+          link.href = canvas.toDataURL("image/png");
+          link.download = "somefilename.png";
+          link.click();
+        });
+      }, 1000);
     }
   }
 };
 </script>
 
 <style>
-.v-card__subtitle.card-logo {
+.v-card__subtitle.card-logo,
+.card-logo {
   font-family: "Quicksand", sans-serif;
   font-weight: bold;
   font-size: 24px;
   line-height: 30px;
   color: #000000 !important;
+}
+.v-dialog.v-dialog--active.v-dialog--fullscreen {
+  background: white;
 }
 </style>
