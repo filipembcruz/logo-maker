@@ -5,7 +5,7 @@
       <v-container class="pa-0" style="max-width:70%">
         <v-toolbar flat v-if="window.width > 800" class="toolbar-custom" color="#303F9F" dark>
           <v-toolbar-title class="logo-title pa-0">
-            <img src="/storage/logo-maker.svg" />
+            <a  :href="home"><img src="/storage/logo-maker.svg" /></a>
           </v-toolbar-title>
 
           <v-spacer></v-spacer>
@@ -48,6 +48,9 @@
 
 <script>
 export default {
+  props: {
+    home: String,
+  },
   data: function() {
     return {
       window: {

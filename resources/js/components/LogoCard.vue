@@ -4,9 +4,14 @@
       <v-progress-circular indeterminate size="150" width="10" color="#3F51B5"></v-progress-circular>
     </v-overlay>
     <v-col cols="12" md="4" sm="6" v-for="icon in icons" :key="icon.id" class="pa-5">
-      <v-card class="card-logo pt-8 pb-5" outlined @click="mountImage(icon.url)">
-        <div style="width: 50%;margin: 0 auto;max-height: 80px;">
-          <img :src="icon.url" class="mx-auto d-block" />
+      <v-card
+        class="card-logo pt-8 pb-5"
+        outlined
+        @click="downloadImage(icon.url)"
+        style="min-height: 185px;"
+      >
+        <div>
+          <v-img style="max-height: 65px;" :src="icon.url" class="mx-auto d-block" />
         </div>
         <v-card-subtitle
           class="card-logo text-center"
@@ -15,32 +20,18 @@
         ></v-card-subtitle>
       </v-card>
     </v-col>
-    <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
-      <v-toolbar dark color="primary">
-        <v-btn icon dark @click="dialog = false">
-          <v-icon>mdi-close</v-icon>
-        </v-btn>
-        <v-toolbar-title>Settings</v-toolbar-title>
-        <v-spacer></v-spacer>
-        <v-toolbar-items>
-          <v-btn dark text @click="downloadImage()">Download</v-btn>
-        </v-toolbar-items>
-      </v-toolbar>
-      <div
-        v-if="currentLogo"
-        id="current_logo"
-        style="background-color: #eaeaea; width: 70%; margin: 5% auto;"
-      >
-        <img :src="currentLogo" style="width: 50%; display: block; margin: 0 auto;" />
-        <h1 class="card-logo" v-text="company" style="font-size: 12rem; text-align: center;"></h1>
-      </div>
-    </v-dialog>
+
+    <div id="current_logo">
+      <img :src="currentLogo" class="mx-auto d-block" />
+      <h1 class="card-logo" v-text="company"></h1>
+    </div>
   </v-row>
 </template>
 
 <script>
 import axios from "axios";
 import html2canvas from "html2canvas";
+import domtoimage from "dom-to-image";
 
 export default {
   props: {
@@ -106,23 +97,23 @@ export default {
       self.page--;
       return term;
     },
-    mountImage(url) {
+    downloadImage(url) {
       this.dialog = true;
       this.currentLogo = url;
-    },
-    downloadImage(url) {
+      let company = this.company;
+      let mydiv = document.querySelector("#current_logo");
       setTimeout(() => {
-        html2canvas(document.querySelector("#current_logo"), {
+        html2canvas(mydiv, {
+          scale: 1,
+          quality: 10,
           width: 2000,
           height: 2000,
           useCORS: true
         }).then(function(canvas) {
           console.log(canvas);
-
           var link = document.createElement("a");
-          // toDataURL defaults to png, so we need to request a jpeg, then convert for file download.
           link.href = canvas.toDataURL("image/png");
-          link.download = "somefilename.png";
+          link.download = company + " - Logo Maker.png";
           link.click();
         });
       }, 1000);
@@ -140,7 +131,33 @@ export default {
   line-height: 30px;
   color: #000000 !important;
 }
+.card-logo.v-card:hover {
+  border: 2px solid #3f51b5 !important;
+}
 .v-dialog.v-dialog--active.v-dialog--fullscreen {
+  background: white;
+}
+.card-logo .v-image__image,
+.current-logo .v-image__image {
+  background-size: contain;
+}
+#current_logo h1 {
+  font-size: 15rem;
+  text-align: center;
+  line-height: 25rem;
+}
+
+#current_logo img {
+  width: 50%;
+  margin-top: 25%;
+}
+
+#current_logo {
+  width: 2000px;
+  height: 2000px;
+  left: -9999999px;
+  top: -999999999;
+  position: absolute;
   background: white;
 }
 </style>

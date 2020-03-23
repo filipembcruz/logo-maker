@@ -27,7 +27,7 @@ class GeneratorController extends Controller
         foreach ($results as $key => $result) {
             $icons[] = [
                 'id' => $key,
-                'url' => $result['icon_url'],
+                'url' => $result['preview_url'],
             ];
         }
 

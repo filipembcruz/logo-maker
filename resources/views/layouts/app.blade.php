@@ -26,7 +26,7 @@
 <body>
     @guest
     <v-app id='app'>
-        <main-menu></main-menu>
+        <main-menu home="{{ route('home') }}"></main-menu>
         @yield('content')
     </v-app>
     @endguest
