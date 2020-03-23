@@ -5,7 +5,7 @@
       <v-container class="pa-0" style="max-width:70%">
         <v-toolbar flat v-if="window.width > 800" class="toolbar-custom" color="#303F9F" dark>
           <v-toolbar-title class="logo-title pa-0">
-            <a  :href="home"><img src="/storage/logo-maker.svg" /></a>
+            <a  :href="home"><img src="/logo-maker.svg" /></a>
           </v-toolbar-title>
 
           <v-spacer></v-spacer>
@@ -40,7 +40,7 @@
     <v-app-bar v-if="window.width <= 800" app clipped-left color="#303F9F" dark>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-toolbar-title class="logo-title">
-        <img src="/storage/logo-maker.svg" />
+        <img src="/logo-maker.svg" />
       </v-toolbar-title>
     </v-app-bar>
   </div>

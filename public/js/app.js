@@ -46636,9 +46636,7 @@ var render = function() {
                         { staticClass: "logo-title pa-0" },
                         [
                           _c("a", { attrs: { href: _vm.home } }, [
-                            _c("img", {
-                              attrs: { src: "/storage/logo-maker.svg" }
-                            })
+                            _c("img", { attrs: { src: "/logo-maker.svg" } })
                           ])
                         ]
                       ),
@@ -46740,7 +46738,7 @@ var render = function() {
               }),
               _vm._v(" "),
               _c("v-toolbar-title", { staticClass: "logo-title" }, [
-                _c("img", { attrs: { src: "/storage/logo-maker.svg" } })
+                _c("img", { attrs: { src: "/logo-maker.svg" } })
               ])
             ],
             1
